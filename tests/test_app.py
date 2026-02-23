@@ -1,15 +1,5 @@
 from http import HTTPStatus
 
-import pytest
-from fastapi.testclient import TestClient
-
-from fastapi_zero.app import app
-
-
-@pytest.fixture
-def client():
-    return TestClient(app)
-
 
 def test_root_deve_retornar_hello_world_HTML(client):
 
