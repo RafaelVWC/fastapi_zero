@@ -11,8 +11,10 @@ app.include_router(auth.router)
 app.include_router(users.router)
 
 
-@app.get('/', status_code=HTTPStatus.OK, response_class=HTMLResponse)
-def exercicio_aula02():
+@app.get(
+    '/exercicio-html', status_code=HTTPStatus.OK, response_class=HTMLResponse
+)
+async def exercicio_aula02():
     return """"
     <html>
         <head>
@@ -23,3 +25,8 @@ def exercicio_aula02():
            <h2> FastAPI é vida </h2>
         </body>
     </html>"""
+
+
+@app.get('/')
+async def read_root():
+    return {'message': 'Olá Mundo!'}
