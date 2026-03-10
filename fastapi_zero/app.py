@@ -29,4 +29,4 @@ async def exercicio_aula02():
 
 @app.get('/')
 async def read_root():
-    return {'message': 'Olá Mundo!'}
+    return {'message': 'Hello World!'}

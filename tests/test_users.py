@@ -77,20 +77,12 @@ def test_delete_user(client, user, token):
     assert response.json() == {'message': 'User deleted'}
 
 
-def test_update_integrity_error(client, user, token):
-    client.post(
-        '/users/',
-        json={
-            'username': 'Fausto',
-            'email': 'fausto@example.com',
-            'password': 'secret',
-        },
-    )
+def test_update_integrity_error(client, user, other_user, token):
     response = client.put(
         f'/users/{user.id}',
         headers={'Authorization': f'Bearer {token}'},
         json={
-            'username': 'Fausto',
+            'username': other_user.username,
             'email': 'fausto@example.com',
             'password': 'mynewpassword',
         },
@@ -123,3 +115,25 @@ def test_create_user_email_already_exists(client, user):
     )
     assert response.status_code == HTTPStatus.CONFLICT
     assert response.json() == {'detail': 'Email already exists'}
+
+
+def test_update_user_not_authorized(client, other_user, token):
+    response = client.put(
+        f'/users/{other_user.id}',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            'username': 'bob',
+            'email': 'bob@example.com',
+            'password': 'secret',
+        },
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+    assert response.json() == {'detail': 'Not authorized to update this user'}
+
+
+def test_delete_user_not_authorized(client, other_user, token):
+    response = client.delete(
+        f'/users/{other_user.id}', headers={'Authorization': f'Bearer {token}'}
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+    assert response.json() == {'detail': 'Not authorized to delete this user'}

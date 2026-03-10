@@ -110,7 +110,7 @@ async def delete_user(
 
     if current_user.id != user_id:
         raise HTTPException(
-            detail='Not authorized to update this user',
+            detail='Not authorized to delete this user',
             status_code=HTTPStatus.FORBIDDEN,
         )
 
