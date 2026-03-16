@@ -84,19 +84,19 @@ def test_refresh_token(client, token):
 
 
 def test_token_expired_dont_refresh(client, user):
-   
+
     with freeze_time('2026-02-25 12:00:00'):
         response = client.post(
             '/auth/token',
             data={
                 'username': user.email,
                 'password': user.clean_password,
-                }
+            },
         )
 
         assert response.status_code == HTTPStatus.OK
         token = response.json()['access_token']
-   
+
     with freeze_time('2026-02-25 12:31:00'):
         response = client.post(
             '/auth/refresh_token',
