@@ -3,7 +3,8 @@ from http import HTTPStatus
 import factory
 import factory.fuzzy
 import pytest
-from sqlalchemy import select
+from sqlalchemy import func, select
+from sqlalchemy.exc import DataError
 
 from fastapi_zero.models import Todo, TodoState, User
 
@@ -238,7 +239,11 @@ async def test_create_todo_error(session, user: User):
     )
 
     session.add(todo)
-    await session.commit()
 
-    with pytest.raises(LookupError):
-        await session.scalar(select(Todo))
+    with pytest.raises(DataError):
+        await session.commit()
+
+    await session.rollback()
+
+    count = await session.scalar(select(func.count(Todo.id)))
+    assert count == 0

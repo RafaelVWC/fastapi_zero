@@ -1,0 +1,29 @@
+services:
+  fastzero_database:
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_user -d app_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql  
+
+  fastzero_app:
+    image: fastzero_app
+    entrypoint: ["sh", "/app/entrypoint.sh"]
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      fastzero_database:
+        condition: service_healthy
+    env_file:
+      - .env        
+
+volumes:
+  pgdata:      
