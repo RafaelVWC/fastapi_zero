@@ -1,0 +1,35 @@
+name: Pipeline
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Copy repository
+        uses: actions/checkout@v4
+
+
+      - name: Install pyhthon
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+        
+      - name: Intsall poetry
+        run: pipx install poetry
+          
+      - name: Install dependencies
+        run: poetry install
+        
+      - name: Execute tests
+        run: poetry run task test
+            
+    env:
+      DATABASE_URL: ${{secrets.DARABASE_URL}}
+      SECRET_KEY: ${{secrets.SECRET_KEY}}
+      ALGORITHM: ${{secrets.ALGORITHM}}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
+      POSTGRES_USER:  ${{secrets.POSTGRES_USER}}
+      POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+      POSTGRES_DB: ${{secrets.POSTGRES_DB}}    
+      
