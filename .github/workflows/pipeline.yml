@@ -20,12 +20,15 @@ jobs:
           
       - name: Install dependencies
         run: poetry install
+      
+      - name: Open Virtual environment
+        run: poetry shell
 
       - name: Execute format
-        run: poetry run task format
+        run: task format
         
       - name: Execute tests
-        run: poetry run task test
+        run: task test
             
     env:
       DATABASE_URL: ${{secrets.DATABASE_URL}}
