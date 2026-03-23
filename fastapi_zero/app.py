@@ -10,7 +10,7 @@ from fastapi_zero.routers import auth, todos, users
 if sys.platform == 'win32':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-app = FastAPI(title='Título bem massa')
+app = FastAPI(title='FastAPI primeira aplicação')
 
 app.include_router(auth.router)
 app.include_router(users.router)
@@ -29,6 +29,7 @@ async def exercicio_aula02():
         <body>
            <h1> Hello World </h1>
            <h2> FastAPI é vida </h2>
+           <h3>Criado por Rafael V W Cruz</h3>
         </body>
     </html>"""
 
